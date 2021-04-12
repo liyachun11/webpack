@@ -1,0 +1,11 @@
+
+
+node_modules/
+npm-debug/
+.idea/
+bundle/
+.history/
+.vscode/
+package-lock.json
+Dockerfile
+default.config

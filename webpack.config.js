@@ -11,20 +11,40 @@ const { VueLoaderPlugin } = require("vue-loader");
 //解析vue的
 //这个插件是必须的！ 它的职责是将你定义过的其它规则复制并应用到 .vue 文件里相应语言的块。例如，如果你有一条匹配 /\.js$/ 的规则，那么它会应用到 .vue 文件里的 <script> 块。
 module.exports = {
+  mode: "development", //"production",
   entry: "./src/index.js",
   output: {
-    filename: "mian.js",
-    path: path.resolve(__dirname, "mdist/js"),
+    filename: "bundle.[hash:8].js",
+    path: path.resolve(__dirname, "dist"),
+    publicPath: "./dist/",
   },
   module: {
     rules: [
       {
+        test: /\.(png|jpe?g|gif)$/,
+        use: {
+          loader: "url-loader",
+          options: {
+            // placeholder 占位符 [name] 源资源模块的名称
+            // [ext] 源资源模块的后缀
+            name: "[name]_[hash].[ext]",
+            //打包后的存放位置
+            outputPath: "./images",
+            // 打包后文件的 url
+            publicPath: "./images",
+            // 小于 100 字节转成 base64 格式
+            limit: 100,
+          },
+        },
+        // loader: "url-loader?limit=100&name=img/[name].[hash:6].[ext]",
+      },
+      {
         test: /\.vue$/,
         loader: "vue-loader",
-        exclude: (file) => /node_modules/.test(file) && !/\.vue\.js/.test(file),
       },
     ],
   },
+
   plugins: [
     new CleanWebpackPlugin(),
     new VueLoaderPlugin(),
